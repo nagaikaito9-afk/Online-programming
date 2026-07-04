@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>本格プログラミングゲーム</title>
+    <title>プログラミング道場 | Multi-Language Editor</title>
     <link rel="stylesheet" href="style.css">
     
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
@@ -14,83 +14,83 @@
 
     <div id="login-screen" class="screen">
         <div class="login-box">
-            <h1>プログラミング道場</h1>
-            <p>学習を記録するためにログインしましょう</p>
-            <button id="login-btn" class="google-btn">Googleでログイン</button>
+            <h1 data-i18n="app-title">プログラミング道場</h1>
+            <p data-i18n="login-prompt">学習を記録するためにログインしましょう</p>
+            <button id="login-btn" class="google-btn">Google Log-in</button>
             <p id="login-error-msg" class="error-text"></p>
         </div>
     </div>
 
     <div id="game-screen" class="screen hidden">
         <header>
-            <h2>💻 プログラミングエディタ</h2>
+            <div class="header-left">
+                <h2 data-i18n="editor-title">💻 エディタ</h2>
+                <button id="lang-menu-btn" class="icon-btn">🌎</button>
+                <div id="lang-selector" class="lang-menu hidden">
+                    <button onclick="changeLang('ja')">日本語</button>
+                    <button onclick="changeLang('ja-kana')">にほんご</button>
+                    <button onclick="changeLang('en')">English</button>
+                    <button onclick="changeLang('es')">Español</button>
+                    <button onclick="changeLang('fr')">Français</button>
+                </div>
+            </div>
             <div class="user-info">
                 <span id="user-name"></span>
-                <button id="logout-btn">ログアウト</button>
+                <button id="logout-btn" data-i18n="logout">ログアウト</button>
             </div>
         </header>
 
         <div class="toolbar">
-            <label for="mode-select">言語モード: </label>
-            <select id="mode-select">
-                <option value="block">ブロック (Scratch風)</option>
-                <option value="python">Python</option>
-            </select>
-            <button id="run-btn" class="run-button">▶ 実行</button>
+            <div class="tool-group">
+                <label data-i18n="lang-mode">モード: </label>
+                <select id="mode-select">
+                    <option value="block" data-i18n="mode-block">ブロック</option>
+                    <option value="python" data-i18n="mode-python">Python</option>
+                </select>
+            </div>
+            <div class="tool-group">
+                <button id="tutorial-btn" class="sub-btn" data-i18n="tutorial">チュートリアル</button>
+                <button id="import-file-btn" class="sub-btn" data-i18n="import">ファイル読込</button>
+                <input type="file" id="file-input" class="hidden" accept=".py">
+                <button id="run-btn" class="run-button" data-i18n="run">▶ 実行</button>
+            </div>
         </div>
 
         <div class="editor-container">
             <div id="blockly-div"></div>
-            <textarea id="python-editor" class="hidden" placeholder="例: print('Hello, World!')"></textarea>
+            <textarea id="python-editor" class="hidden" placeholder="print('Hello World')"></textarea>
         </div>
 
         <div class="output-container">
-            <h3>ターミナル</h3>
+            <h3 data-i18n="terminal">ターミナル</h3>
             <pre id="output-area"></pre>
         </div>
     </div>
 
+    <div id="tutorial-modal" class="modal hidden">
+        <div class="modal-content">
+            <span id="close-tutorial" class="close">&times;</span>
+            <div id="tutorial-text"></div>
+        </div>
+    </div>
+
     <xml id="toolbox" style="display: none">
-        <category name="制御" colour="33">
+        <category name="せいぎょ / 制御" colour="#FFAB19">
             <block type="controls_if"></block>
-            <block type="controls_repeat_ext">
-                <value name="TIMES">
-                    <shadow type="math_number">
-                        <field name="NUM">10</field>
-                    </shadow>
-                </value>
-            </block>
+            <block type="controls_repeat_ext"><value name="TIMES"><shadow type="math_number"><field name="NUM">10</field></shadow></value></block>
             <block type="controls_whileUntil"></block>
         </category>
-        <category name="演算" colour="130">
-            <block type="math_arithmetic">
-                <value name="A">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-                <value name="B">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-            </block>
+        <category name="えんざん / 演算" colour="#59C059">
+            <block type="math_number"></block>
+            <block type="math_arithmetic"></block>
             <block type="logic_compare"></block>
             <block type="logic_operation"></block>
-            <block type="math_number"></block>
         </category>
-        <category name="見た目" colour="260">
-            <block type="text_print">
-                <value name="TEXT">
-                    <shadow type="text">
-                        <field name="TEXT">こんにちは！</field>
-                    </shadow>
-                </value>
-            </block>
+        <category name="ひょうじ / 表示" colour="#9966FF">
+            <block type="text_print"><value name="TEXT"><shadow type="text"><field name="TEXT">こんにちは</field></shadow></value></block>
             <block type="text"></block>
-            <block type="text_join"></block>
         </category>
-        <category name="変数" custom="VARIABLE" colour="330"></category>
+        <category name="へんすう / 変数" custom="VARIABLE" colour="#FF661A"></category>
     </xml>
 
     <script type="module" src="script.js"></script>

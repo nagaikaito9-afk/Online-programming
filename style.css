@@ -1,157 +1,55 @@
-/* 全体のリセットと基本設定 */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f2f5;
-    color: #333;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0; background-color: #f0f2f5;
 }
+.hidden { display: none !important; }
 
-.hidden {
-    display: none !important;
-}
-
-.screen {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* ログイン画面のスタイル */
-#login-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-}
-
-.login-box {
-    background: white;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-.google-btn {
-    background-color: #4285F4;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 15px;
-}
-
-.google-btn:hover { background-color: #357ae8; }
-
-/* ヘッダー周り */
+/* Header & 🌎 Menu */
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex; justify-content: space-between; align-items: center;
+    background: #fff; padding: 10px 20px; border-bottom: 2px solid #ddd;
 }
-
-header h2 { margin: 0; color: #2c3e50; }
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.header-left { display: flex; align-items: center; gap: 15px; position: relative; }
+.icon-btn { font-size: 24px; background: none; border: none; cursor: pointer; }
+.lang-menu {
+    position: absolute; top: 40px; left: 80px; background: white;
+    border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1000; display: flex; flex-direction: column;
 }
-
-#logout-btn {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
+.lang-menu button {
+    padding: 10px 20px; border: none; background: none; text-align: left; cursor: pointer;
 }
+.lang-menu button:hover { background: #f0f0f0; }
 
-/* ツールバー */
+/* Toolbar */
 .toolbar {
-    margin-bottom: 15px;
-    display: flex;
-    gap: 15px;
-    align-items: center;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 20px; background: #fff; border-bottom: 1px solid #ddd;
 }
+.tool-group { display: flex; gap: 10px; align-items: center; }
 
-.run-button {
-    background-color: #27ae60;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 15px;
-}
+/* Buttons */
+.run-button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+.sub-btn { background: #e0e0e0; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
 
-.run-button:hover { background-color: #219653; }
-
-/* エディタ領域 */
-.editor-container {
-    border: 1px solid #ccc;
-    background: #fff;
-    height: 450px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
+/* Editor */
+.editor-container { height: 500px; border: 1px solid #ccc; background: #fff; }
 #blockly-div { width: 100%; height: 100%; }
-
 #python-editor {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 20px;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 18px;
-    border: none;
-    resize: none;
-    background-color: #1e1e1e;
-    color: #d4d4d4;
+    width: 100%; height: 100%; box-sizing: border-box; padding: 20px;
+    font-family: monospace; font-size: 16px; background: #1e1e1e; color: #dcdcdc;
 }
 
-#python-editor:focus { outline: none; }
+/* Modal */
+.modal {
+    position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
+}
+.modal-content {
+    background-color: #fff; padding: 30px; border-radius: 10px; width: 60%; max-height: 80%; overflow-y: auto;
+}
+.close { float: right; font-size: 28px; cursor: pointer; }
 
-/* 出力領域（ターミナル風） */
-.output-container {
-    margin-top: 20px;
-    background: #000;
-    color: #00ff00;
-    padding: 15px;
-    border-radius: 8px;
-    min-height: 150px;
-}
-
-.output-container h3 {
-    margin-top: 0;
-    color: #fff;
-    border-bottom: 1px solid #333;
-    padding-bottom: 5px;
-    font-size: 14px;
-}
-
-#output-area {
-    margin: 0;
-    white-space: pre-wrap;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 15px;
-}
-/* エラーメッセージ用スタイル */
-.error-text {
-    color: #e74c3c;
-    font-size: 14px;
-    margin-top: 15px;
-    min-height: 20px;
-}
+/* Output */
+.output-container { background: #000; color: #00FF00; padding: 15px; min-height: 100px; }
+#output-area { margin: 0; white-space: pre-wrap; font-family: monospace; }
