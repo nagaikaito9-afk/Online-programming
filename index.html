@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プログラミングゲーム</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+</head>
+<body>
+
+    <div id="game-screen" class="screen">
+        <header>
+            <h2>プログラミング画面</h2>
+        </header>
+
+        <div class="toolbar">
+            <label for="mode-select">言語モード: </label>
+            <select id="mode-select">
+                <option value="block">ブロック (Scratch風)</option>
+                <option value="python">Python</option>
+            </select>
+            <button id="run-btn" class="run-button">▶ 実行</button>
+        </div>
+
+        <div class="editor-container">
+            <div id="blockly-div"></div>
+            <textarea id="python-editor" class="hidden" placeholder="ここにPythonコードを入力..."></textarea>
+        </div>
+
+        <div class="output-container">
+            <h3>出力結果</h3>
+            <pre id="output-area"></pre>
+        </div>
+    </div>
+
+    <xml id="toolbox" style="display: none">
+        <block type="controls_if"></block>
+        <block type="logic_compare"></block>
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+        <block type="text"></block>
+        <block type="text_print"></block>
+    </xml>
+
+    <script src="script.js"></script>
+</body>
+</html>
