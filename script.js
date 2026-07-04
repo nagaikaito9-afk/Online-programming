@@ -1,19 +1,20 @@
-// Firebase SDK のインポート (v9 モジュール版)
+// Firebase SDK (v9 モジュール版)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } 
     from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-// TODO: Firebaseコンソールでプロジェクトを作成し、以下の設定を自分のものに置き換えてください
+// ==========================================
+// 1. Firebaseの設定 (あなたのプロジェクト情報)
+// ==========================================
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCoTHIrURvePN07XFezsoPApiIjpKPOGnw",
+  authDomain: "online-programming.firebaseapp.com",
+  projectId: "online-programming",
+  storageBucket: "online-programming.firebasestorage.app",
+  messagingSenderId: "1039946769321",
+  appId: "1:1039946769321:web:f3b8d24046745b57a51ab8"
 };
 
-// Firebaseの初期化
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -23,42 +24,46 @@ const loginScreen = document.getElementById('login-screen');
 const gameScreen = document.getElementById('game-screen');
 const loginBtn = document.getElementById('login-btn');
 const logoutBtn = document.getElementById('logout-btn');
+const userNameDisplay = document.getElementById('user-name');
 const modeSelect = document.getElementById('mode-select');
 const blocklyDiv = document.getElementById('blockly-div');
 const pythonEditor = document.getElementById('python-editor');
 const runBtn = document.getElementById('run-btn');
 const outputArea = document.getElementById('output-area');
 
-// 1. Firebase 認証処理
-// ログインボタンのクリックイベント
+let workspace = null;
+
+// ==========================================
+// 2. Firebase 認証機能
+// ==========================================
 loginBtn.addEventListener('click', () => {
-    signInWithPopup(auth, provider).catch((error) => {
-        console.error("ログインエラー:", error);
-        alert("ログインに失敗しました。");
+    signInWithPopup(auth, provider).catch(error => {
+        alert("ログインエラー: " + error.message);
+        console.error(error);
     });
 });
 
-// ログアウトボタンのクリックイベント
 logoutBtn.addEventListener('click', () => {
-    signOut(auth).catch((error) => console.error("ログアウトエラー:", error));
+    signOut(auth);
 });
 
-// ログイン状態の監視
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        // ログイン成功時
+        // ログイン状態
         loginScreen.classList.add('hidden');
         gameScreen.classList.remove('hidden');
-        initBlockly(); // 画面が表示されてからBlocklyを初期化する
+        userNameDisplay.textContent = `${user.displayName} さん`;
+        initBlockly(); // 画面が表示されてからBlocklyを起動
     } else {
-        // ログアウト時
+        // ログアウト状態
         loginScreen.classList.remove('hidden');
         gameScreen.classList.add('hidden');
     }
 });
 
-// 2. Blockly (ブロックエディタ) の設定
-let workspace = null;
+// ==========================================
+// 3. Blockly (ブロックエディタ) の初期化
+// ==========================================
 function initBlockly() {
     if (!workspace) {
         workspace = Blockly.inject('blockly-div', {
@@ -69,29 +74,62 @@ function initBlockly() {
     }
 }
 
-// 3. エディタモードの切り替え処理
+// モード切り替え
 modeSelect.addEventListener('change', (e) => {
     const mode = e.target.value;
     if (mode === 'block') {
         blocklyDiv.classList.remove('hidden');
         pythonEditor.classList.add('hidden');
+        if (workspace) Blockly.svgResize(workspace);
     } else if (mode === 'python') {
         blocklyDiv.classList.add('hidden');
         pythonEditor.classList.remove('hidden');
     }
 });
 
-// 4. コード実行ボタンの処理 (モックアップ)
+// ==========================================
+// 4. プログラムの実行処理
+// ==========================================
+
+// Python実行時の出力を受け取る関数
+function builtinRead(x) {
+    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+            throw "File not found: '" + x + "'";
+    return Sk.builtinFiles["files"][x];
+}
+
 runBtn.addEventListener('click', () => {
     const mode = modeSelect.value;
-    outputArea.textContent = "実行中...\n";
+    outputArea.textContent = ""; // 出力エリアをリセット
 
     if (mode === 'block') {
-        // 注: 実際にブロックの論理を実行するには Blockly.JavaScript.workspaceToCode などを利用します
-        outputArea.textContent += "ブロックプログラミングの実行結果がここに表示されます。";
-    } else {
+        outputArea.textContent = "【ブロックモード】\n現在は組み立てたブロックの構成が保存されています。\nPythonモードに切り替えてコードを書いてみましょう！";
+    } 
+    else if (mode === 'python') {
         const pythonCode = pythonEditor.value;
-        // 注: ブラウザ上でPythonを実行するには Brython や Pyodide などの導入が必要です
-        outputArea.textContent += `以下のPythonコードの実行を試みました:\n\n${pythonCode}\n\n(※実際のPython実行にはバックエンドAPIかPyodide等のライブラリが必要です)`;
+        outputArea.textContent = "実行中...\n";
+
+        // Skulptの設定
+        Sk.pre = "output-area";
+        Sk.configure({
+            output: function(text) {
+                outputArea.textContent += text; 
+            },
+            read: builtinRead
+        });
+
+        // Pythonコードの非同期実行
+        let myPromise = Sk.misceval.asyncToPromise(function() {
+            return Sk.importMainWithBody("<stdin>", false, pythonCode, true);
+        });
+
+        myPromise.then(
+            function(mod) {
+                outputArea.textContent += "\n--- 実行完了 ---";
+            },
+            function(err) {
+                outputArea.textContent = "【エラーが発生しました】\n" + err.toString();
+            }
+        );
     }
 });

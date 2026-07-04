@@ -3,15 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プログラミングゲーム</title>
+    <title>本格プログラミングゲーム</title>
     <link rel="stylesheet" href="style.css">
+    
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
 </head>
 <body>
 
-    <div id="game-screen" class="screen">
+    <div id="login-screen" class="screen">
+        <div class="login-box">
+            <h1>プログラミング道場</h1>
+            <p>学習を記録するためにログインしましょう</p>
+            <button id="login-btn" class="google-btn">Googleでログイン</button>
+        </div>
+    </div>
+
+    <div id="game-screen" class="screen hidden">
         <header>
-            <h2>プログラミング画面</h2>
+            <h2>💻 プログラミングエディタ</h2>
+            <div class="user-info">
+                <span id="user-name"></span>
+                <button id="logout-btn">ログアウト</button>
+            </div>
         </header>
 
         <div class="toolbar">
@@ -20,29 +36,35 @@
                 <option value="block">ブロック (Scratch風)</option>
                 <option value="python">Python</option>
             </select>
-            <button id="run-btn" class="run-button">▶ 実行</button>
+            <button id="run-btn" class="run-button">▶ プログラムを実行</button>
         </div>
 
         <div class="editor-container">
             <div id="blockly-div"></div>
-            <textarea id="python-editor" class="hidden" placeholder="ここにPythonコードを入力..."></textarea>
+            <textarea id="python-editor" class="hidden" placeholder="ここにPythonのコードを書いてみよう！&#10;例: print('Hello, World!')"></textarea>
         </div>
 
         <div class="output-container">
-            <h3>出力結果</h3>
-            <pre id="output-area"></pre>
+            <h3>ターミナル（実行結果）</h3>
+            <pre id="output-area">準備完了...</pre>
         </div>
     </div>
 
     <xml id="toolbox" style="display: none">
-        <block type="controls_if"></block>
-        <block type="logic_compare"></block>
-        <block type="math_number"></block>
-        <block type="math_arithmetic"></block>
-        <block type="text"></block>
-        <block type="text_print"></block>
+        <category name="論理" colour="%{BKY_LOGIC_HUE}">
+            <block type="controls_if"></block>
+            <block type="logic_compare"></block>
+        </category>
+        <category name="計算" colour="%{BKY_MATH_HUE}">
+            <block type="math_number"></block>
+            <block type="math_arithmetic"></block>
+        </category>
+        <category name="テキスト" colour="%{BKY_TEXTS_HUE}">
+            <block type="text"></block>
+            <block type="text_print"></block>
+        </category>
     </xml>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
