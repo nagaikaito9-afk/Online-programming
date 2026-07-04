@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
     
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
 </head>
@@ -18,6 +17,7 @@
             <h1>プログラミング道場</h1>
             <p>学習を記録するためにログインしましょう</p>
             <button id="login-btn" class="google-btn">Googleでログイン</button>
+            <p id="login-error-msg" class="error-text"></p>
         </div>
     </div>
 
@@ -36,33 +36,61 @@
                 <option value="block">ブロック (Scratch風)</option>
                 <option value="python">Python</option>
             </select>
-            <button id="run-btn" class="run-button">▶ プログラムを実行</button>
+            <button id="run-btn" class="run-button">▶ 実行</button>
         </div>
 
         <div class="editor-container">
             <div id="blockly-div"></div>
-            <textarea id="python-editor" class="hidden" placeholder="ここにPythonのコードを書いてみよう！&#10;例: print('Hello, World!')"></textarea>
+            <textarea id="python-editor" class="hidden" placeholder="例: print('Hello, World!')"></textarea>
         </div>
 
         <div class="output-container">
-            <h3>ターミナル（実行結果）</h3>
-            <pre id="output-area">準備完了...</pre>
+            <h3>ターミナル</h3>
+            <pre id="output-area"></pre>
         </div>
     </div>
 
     <xml id="toolbox" style="display: none">
-        <category name="論理" colour="%{BKY_LOGIC_HUE}">
+        <category name="制御" colour="33">
             <block type="controls_if"></block>
+            <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <shadow type="math_number">
+                        <field name="NUM">10</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="controls_whileUntil"></block>
+        </category>
+        <category name="演算" colour="130">
+            <block type="math_arithmetic">
+                <value name="A">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="B">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+            </block>
             <block type="logic_compare"></block>
-        </category>
-        <category name="計算" colour="%{BKY_MATH_HUE}">
+            <block type="logic_operation"></block>
             <block type="math_number"></block>
-            <block type="math_arithmetic"></block>
         </category>
-        <category name="テキスト" colour="%{BKY_TEXTS_HUE}">
+        <category name="見た目" colour="260">
+            <block type="text_print">
+                <value name="TEXT">
+                    <shadow type="text">
+                        <field name="TEXT">こんにちは！</field>
+                    </shadow>
+                </value>
+            </block>
             <block type="text"></block>
-            <block type="text_print"></block>
+            <block type="text_join"></block>
         </category>
+        <category name="変数" custom="VARIABLE" colour="330"></category>
     </xml>
 
     <script type="module" src="script.js"></script>
